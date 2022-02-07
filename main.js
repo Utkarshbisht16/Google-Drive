@@ -13,6 +13,17 @@ let rid = 0;
 btnfolder.addEventListener("click",
 function addfolder(e){
     let rname = prompt("Enter folder's name");
+    if(!rname){ // empty name validation
+        alert("Empty name folder can not be created");
+        return;
+    }
+    //unique validation
+    rname = rname.trim();
+    let alreadyExist = Resource.some(r => r.rname == rname && r.pid == cfid);
+    if(alreadyExist == true){
+        alert(rname + " is already in use. Try some other name");
+        return;
+    }
     let pid = cfid;
     rid++;
     addfolderHTML(rname, rid, pid);
