@@ -1,0 +1,65 @@
+#header{
+    border: 1px solid black;
+    margin: 10px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+#breadcrum{
+    border: 1px solid black;
+    margin: 10px;
+    padding: 10px;
+
+}
+#container{
+    border: 1px solid black;
+    margin: 10px;
+    padding: 10px;
+    display : flex;
+    
+}
+#preview{
+    border: 1px solid black;
+    margin: 10px;
+    padding: 10px;
+
+}   
+#header button{
+    margin: 10px;
+    padding: 20px;
+    cursor: pointer;
+    background-color: sandybrown;
+    font-weight: 600;
+    color: white;
+    border-radius: 20px;
+
+}
+#header button:hover{
+    background-color: lightskyblue;
+    transform: scale(1.1);
+}
+.folder{
+    background: lightseagreen;
+    color: white;
+    height: 100px ;
+    width: 150px;
+    border-radius: 20px;
+    margin: 10px;
+    padding: 10px;
+    border: solid sandybrown;
+}
+.folder div[purpose = name]{
+    margin-top:  60px;
+    padding-left: 30px;
+}
+.folder [action]{
+    /* border: solid wheat 0.2px; */
+    text-decoration: underline;
+    cursor: pointer;
+
+}
+.folder [action]:hover{
+    background: lightcoral;
+}
