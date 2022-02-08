@@ -2,7 +2,9 @@ let btnfolder = document.querySelector("#addFolder");
 let btnfile = document.querySelector("#addTextFile");
 let divContainer = document.querySelector("#container");
 let divBreadcrum = document.querySelector("#breadcrum");
+let aRoothPath = divBreadcrum.querySelector("a[purpose='path']");
 let divpreview = document.querySelector("#preview");
+let template = document.querySelector("#template");
 let Resource = [];
 let cfid = -1; // initially we are at root which has pid of -1.(Current folder id)
 let rid = 0;
@@ -13,7 +15,7 @@ let rid = 0;
 btnfolder.addEventListener("click",
     function addfolder(e) {
         let rname = prompt("Enter folder's name");
-        if(rname != null){
+        if (rname != null) {
             rname = rname.trim();
         }
         if (!rname) { // empty name validation
@@ -40,13 +42,7 @@ btnfolder.addEventListener("click",
         });
         //Storage save
         saveToStorage();
-    })
-
-btnfile.addEventListener("click",
-    function addfile(e) {
-        let TFname = prompt("Enter text files's name");
-        console.log(TFname);
-    })
+    });
 
 function addfolderHTML(rname, rid, pid) {
     // taking template and making a clone of it.
@@ -70,55 +66,102 @@ function addfolderHTML(rname, rid, pid) {
     divContainer.appendChild(divFolder);
 }
 
+btnfile.addEventListener("click",
+    function addfile(e) {
+        let TFname = prompt("Enter text files's name");
+        console.log(TFname);
+    });
+
+
+aRoothPath.addEventListener("click",viewFromBreadcrum);
+
+function viewFromBreadcrum(){
+    let apath = this;
+    let fid = parseInt(apath.getAttribute("rid"));
+
+    // set breadcrum
+    while(apath.nextSibling){
+        apath.parentNode.removeChild(apath.nextSibling);
+    }
+
+    // set the container
+    cfid = fid;
+    divContainer.innerHTML = "";
+    for(let i = 0; i < Resource.length; i++){
+        if(Resource[i].pid == cfid){
+            addfolderHTML(Resource[i].rname, Resource[i].rid, Resource[i].pid);
+        }
+    }
+
+}
 function deleteFolder() {
-    let FN = Fname;
-    console.log(FN);
-    console.log("folder delete of" + FN);
+
 }
 
 function deleteTextFile() {
 
 }
 function viewFolder() {
-    console.log("folder view");
+    let spanview = this;
+    let divFolder = spanview.parentNode;
+    let divName = divFolder.querySelector("[purpose='name']");
+
+    let fname = divName.innerHTML;
+    let fid = parseInt(divFolder.getAttribute("rid"));
+
+    let aPathTemplate = template.content.querySelector("a[purpose='path']");
+    let apath = document.importNode(aPathTemplate,true);
+
+    apath.innerHTML = fname;
+    apath.setAttribute("rid",fid);
+    apath.addEventListener("click",viewFromBreadcrum);
+    divBreadcrum.appendChild(apath);
+
+    cfid = fid;
+    divContainer.innerHTML = "";
+    for(let i = 0; i < Resource.length; i++){
+        if(Resource[i].pid == cfid){
+            addfolderHTML(Resource[i].rname, Resource[i].rid, Resource[i].pid);
+        }
+    }
 }
 function viewTextFile() {
 
 }
 function renameFolder() {
     let Nrname = prompt("Enter a new name of folder.");
-        if(Nrname != null){
-            Nrname = Nrname.trim();
-        }
-        if (!Nrname) { // empty name validation
-            alert("Empty name folder can not be created");
-            return;
-        } 
+    if (Nrname != null) {
+        Nrname = Nrname.trim();
+    }
+    if (!Nrname) { // empty name validation
+        alert("Empty name folder can not be created");
+        return;
+    }
 
-        let spanRename = this;
-        let divFolder = spanRename.parentNode;
-        let divName = divFolder.querySelector("[purpose=name]");
-        let Orname = divName.innerHTML;
-        let ridTBU = parseInt(divFolder.getAttribute("rid"));
+    let spanRename = this;
+    let divFolder = spanRename.parentNode;
+    let divName = divFolder.querySelector("[purpose=name]");
+    let Orname = divName.innerHTML;
+    let ridTBU = parseInt(divFolder.getAttribute("rid"));
 
-        if(Orname == Nrname){
-            alert("Please enter a new name");
-            return;
-        }
+    if (Orname == Nrname) {
+        alert("Please enter a new name");
+        return;
+    }
 
-        let alreadyExist = Resource.some(r => r.rname == Nrname && r.pid == cfid);
-        if(alreadyExist == true){
-            alert(Nrname + " already exist. Please enter a new name");
-            return;
-        }
+    let alreadyExist = Resource.some(r => r.rname == Nrname && r.pid == cfid);
+    if (alreadyExist == true) {
+        alert(Nrname + " already exist. Please enter a new name");
+        return;
+    }
 
-        //Change HTML
-        divName.innerHTML = Nrname;
-        //change RAM
-        let r = Resource.find(r=> r.rid == ridTBU);
-        r.rname = Nrname;
-        // change in storage
-        saveToStorage();
+    //Change HTML
+    divName.innerHTML = Nrname;
+    //change RAM
+    let r = Resource.find(r => r.rid == ridTBU);
+    r.rname = Nrname;
+    // change in storage
+    saveToStorage();
 }
 function renameTextFile() {
 
@@ -130,7 +173,7 @@ function saveToStorage() {
 }
 function loadFromStorage() {
     let rjson = localStorage.getItem("data");
-    if (!rjson){
+    if (!rjson) {
         return;
     }
     Resource = JSON.parse(rjson);

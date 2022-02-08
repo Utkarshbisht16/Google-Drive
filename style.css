@@ -10,9 +10,18 @@
 #breadcrum{
     border: 1px solid black;
     margin: 10px;
-    padding: 10px;
+    display: flex;
 
 }
+#breadcrum a{
+    background: tomato;
+    padding: 10px;
+    border-right: solid black;
+}
+#breadcrum a:hover{
+    background: teal;
+    text-decoration: underline;
+} 
 #container{
     border: 1px solid black;
     margin: 10px;
