@@ -247,7 +247,39 @@ function renameFolder() {
     saveToStorage();
 }
 function renameTextFile() {
+    let Nrname = prompt("Enter a new name of Text file.");
+    if (Nrname != null) {
+        Nrname = Nrname.trim();
+    }
+    if (!Nrname) { // empty name validation
+        alert("Empty name text file can not be created");
+        return;
+    }
 
+    let spanRename = this;
+    let divTextFile = spanRename.parentNode;
+    let divName = divTextFile.querySelector("[purpose=name]");
+    let Orname = divName.innerHTML;
+    let ridTBU = parseInt(divTextFile.getAttribute("rid"));
+
+    if (Orname == Nrname) {
+        alert("Please enter a new name");
+        return;
+    }
+
+    let alreadyExist = Resource.some(r => r.rname == Nrname && r.pid == cfid);
+    if (alreadyExist == true) {
+        alert(Nrname + " already exist. Please enter a new name");
+        return;
+    }
+
+    //Change HTML
+    divName.innerHTML = Nrname;
+    //change RAM
+    let r = Resource.find(r => r.rid == ridTBU);
+    r.rname = Nrname;
+    // change in storage
+    saveToStorage();
 }
 function saveToStorage() {
     //use to create jso to a json string which can be saved
