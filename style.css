@@ -70,5 +70,28 @@
 
 }
 .folder [action]:hover{
-    background: lightcoral;
+    background: lightskyblue;
+}
+.text-file{
+    background: lightsalmon;
+    color: white;
+    height: 100px ;
+    width: 150px;
+    border-radius: 20px;
+    margin: 10px;
+    padding: 10px;
+    border: solid sandybrown;
+}
+.text-file div[purpose = name]{
+    margin-top:  60px;
+    padding-left: 30px;
+}
+.text-file [action]{
+    /* border: solid wheat 0.2px; */
+    text-decoration: underline;
+    cursor: pointer;
+
+}
+.text-file [action]:hover{
+    background: lightskyblue;
 }
