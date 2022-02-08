@@ -95,7 +95,35 @@ function viewFromBreadcrum(){
 
 }
 function deleteFolder() {
+    let spandelete = this;
+    let divFolder = spandelete.parentNode;
+    let divName = divFolder.querySelector("[purpose='name']");
 
+    let fname = divName.innerHTML;
+    let FidTBD = divFolder.getAttribute("rid");
+
+    let sure = confirm(`Are you sure that you want to delete ${fname} ?`);
+    if(!sure){
+        return;
+    }
+    
+    //delete from HTML
+    divContainer.removeChild(divFolder);
+
+    // delete from RAM
+    deleteHelper(FidTBD);
+    //delete from storage
+    saveToStorage();
+}
+function deleteHelper(FidTBD){
+    let Children = Resource.filter(r=> r.pid == FidTBD);
+    for(let i = 0; i < Children.length; i++){
+        //assume that it will delete child and their children recursively
+        deleteHelper(Children[i].rid);
+    }
+    
+    let ridx = Resource.findIndex(r => r.rid == FidTBD);
+    Resource.splice(ridx,1);
 }
 
 function deleteTextFile() {
