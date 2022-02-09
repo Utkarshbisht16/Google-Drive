@@ -5,6 +5,13 @@ let divBreadcrum = document.querySelector("#breadcrum");
 let aRoothPath = divBreadcrum.querySelector("a[purpose='path']");
 let divpreview = document.querySelector("#preview");
 let template = document.querySelector("#template");
+
+let divApp = document.querySelector("#app");
+let divAppTitleBar = document.querySelector("#app-title-bar");
+let divAppTitle = document.querySelector("#app-title");
+let divAppMenuBar = document.querySelector("#app-menu-bar");
+let divAppBody = document.querySelector("#app-body");
+
 let Resource = [];
 let cfid = -1; // initially we are at root which has pid of -1.(Current folder id)
 let rid = 0;
@@ -178,7 +185,26 @@ function deleteHelper(FidTBD){
 }
 
 function deleteTextFile() {
+    let spandelete = this;
+    let divTextFile = spandelete.parentNode;
+    let divName = divTextFile.querySelector("[purpose='name']");
 
+    let fname = divName.innerHTML;
+    let FidTBD = divTextFile.getAttribute("rid");
+
+    let sure = confirm(`Are you sure that you want to delete ${fname} ?`);
+    if(!sure){
+        return;
+    }
+    
+    //delete from HTML
+    divContainer.removeChild(divTextFile);
+
+    // delete from RAM
+    let ridx = Resource.findIndex(r => r.rid == FidTBD);
+    Resource.splice(ridx,1);
+    //delete from storage
+    saveToStorage();
 }
 function viewFolder() {
     let spanview = this;
@@ -209,7 +235,143 @@ function viewFolder() {
     }
 }
 function viewTextFile() {
+    let spanview = this;
+    let divFile = spanview.parentNode;
+    let divName = divFile.querySelector("[purpose=name]");
+    let fname = divName.innerHTML;
+    let fid = parseInt(divFile.getAttribute("rid"));
 
+    let divNotepadMenuTemp = template.content.querySelector("[purpose=notepad-menu]");
+    let divNotepadMenu = document.importNode(divNotepadMenuTemp,true);
+    divAppMenuBar.innerHTML = "";
+    divAppMenuBar.appendChild(divNotepadMenu);
+
+    let divNotepadBodyTemp = template.content.querySelector("[purpose=notepad-body]");
+    let divNotepadBody = document.importNode(divNotepadBodyTemp,true);
+    divAppBody.innerHTML = "";
+    divAppBody.appendChild(divNotepadBody);
+
+    divAppTitle.innerHTML=fname;
+    divAppTitle.setAttribute("rid",fid);
+
+    let spansave = divAppMenuBar.querySelector("[action=save]");
+    let spanbold = divAppMenuBar.querySelector("[action=bold]");
+    let spanitalic = divAppMenuBar.querySelector("[action=italic]");
+    let spanunderline = divAppMenuBar.querySelector("[action=underline]");
+    let inputBGcolour = divAppMenuBar.querySelector("[action=bg-color]");
+    let inputFGcolour = divAppMenuBar.querySelector("[action=fg-color]");
+    let selectFontFamily = divAppMenuBar.querySelector("[action=font-family]");
+    let selectFontSize = divAppMenuBar.querySelector("[action=font-size]");
+    let textarea = divAppBody.querySelector("textArea");
+
+    
+    spansave.addEventListener("click",saveNotepad); 
+    spanbold.addEventListener("click",makeNotepadBold) 
+    spanitalic.addEventListener("click",makeNotepadItalic)
+    spanunderline.addEventListener("click",makeNotepadUnderline) 
+    inputBGcolour.addEventListener("change",ChangeNotepadBGcolour) 
+    inputFGcolour.addEventListener("change",ChangeNotepadFGcolour)
+    selectFontFamily.addEventListener("change",ChangeNotepadFontFamily) 
+    selectFontSize.addEventListener("change",ChangeNotepadFontSize) 
+
+    let resource = Resource.find(r=> r.rid == fid);
+    spanbold.setAttribute("pressed", !resource.isBold)
+    spanitalic.setAttribute("pressed", !resource.isItalic)
+    spanunderline.setAttribute("pressed", !resource.isUnderline) 
+    inputBGcolour.value = resource.BGcolor;
+    inputFGcolour.value = resource.FGcolor;
+    selectFontFamily.value = resource.fontFamily;
+    selectFontSize.value = resource.fontSize;
+    textarea.value = resource.content;
+
+    spanbold.dispatchEvent(new Event("click"))
+    spanitalic.dispatchEvent(new Event("click"))
+    spanunderline.dispatchEvent(new Event("click"))
+    inputBGcolour.dispatchEvent(new Event("change"))
+    inputFGcolour.dispatchEvent(new Event("change"))
+    selectFontFamily.dispatchEvent(new Event("change"))
+    selectFontSize.dispatchEvent(new Event("change"))
+    
+
+
+}
+
+function saveNotepad(){
+    let fid = parseInt(divAppTitle.getAttribute("rid"));
+    let resource = Resource.find(r=> r.rid == fid);
+
+    let spanbold = divAppMenuBar.querySelector("[action=bold]");
+    let spanitalic = divAppMenuBar.querySelector("[action=italic]");
+    let spanunderline = divAppMenuBar.querySelector("[action=underline]");
+    let inputBGcolour = divAppMenuBar.querySelector("[action=bg-color]");
+    let inputFGcolour = divAppMenuBar.querySelector("[action=fg-color]");
+    let selectFontFamily = divAppMenuBar.querySelector("[action=font-family]");
+    let selectFontSize = divAppMenuBar.querySelector("[action=font-size]");
+    let textarea = divAppBody.querySelector("textArea")
+
+    resource.isBold = spanbold.getAttribute("pressed") == "true";
+    resource.isItalic = spanitalic.getAttribute("pressed") == "true";
+    resource.isUnderline = spanunderline.getAttribute("pressed") == "true";
+    resource.BGcolor = inputBGcolour.value;
+    resource.FGcolor = inputFGcolour.value;
+    resource.fontFamily = selectFontFamily.value;
+    resource.fontSize = selectFontSize.value;
+    resource.content = textarea.value;
+    saveToStorage();        
+
+}
+function makeNotepadBold(){
+    let textArea = divAppBody.querySelector("textArea");
+    let isPressed = this.getAttribute("pressed") == "true";
+    if(isPressed == false){
+        this.setAttribute("pressed",true);
+        textArea.style.fontWeight="bold";
+    }else{
+        this.setAttribute("pressed",false);
+        textArea.style.fontWeight="normal";
+    }
+}
+function makeNotepadItalic(){
+    let textArea = divAppBody.querySelector("textArea");
+    let isPressed = this.getAttribute("pressed") == "true";
+    if(isPressed == false){
+        this.setAttribute("pressed",true);
+        textArea.style.fontStyle="italic";
+    }else{
+        this.setAttribute("pressed",false);
+        textArea.style.fontStyle="normal";
+    }
+}
+function makeNotepadUnderline(){
+    let textArea = divAppBody.querySelector("textArea");
+    let isPressed = this.getAttribute("pressed") == "true";
+    if(isPressed == false){
+        this.setAttribute("pressed",true);
+        textArea.style.textDecoration="underline";
+    }else{
+        this.setAttribute("pressed",false);
+        textArea.style.textDecoration="none";
+    }
+}
+function ChangeNotepadBGcolour(){
+    let colour = this.value;
+    let textArea = divAppBody.querySelector("textArea");
+    textArea.style.background = colour;
+}
+function ChangeNotepadFGcolour(){
+    let colour = this.value;
+    let textArea = divAppBody.querySelector("textArea");
+    textArea.style.color = colour;
+}
+function ChangeNotepadFontFamily(){
+    let fontFamily = this.value;
+    let textArea = divAppBody.querySelector("textArea");
+    textArea.style.fontFamily = fontFamily;
+}
+function ChangeNotepadFontSize(){
+    let fontSize = this.value;
+    let textArea = divAppBody.querySelector("textArea");
+    textArea.style.fontSize = fontSize;
 }
 function renameFolder() {
     let Nrname = prompt("Enter a new name of folder.");

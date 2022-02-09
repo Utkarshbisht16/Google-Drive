@@ -95,3 +95,67 @@
 .text-file [action]:hover{
     background: lightskyblue;
 }
+#app{
+    border: 1px solid black;
+    margin: 10px;
+}
+#app-title-bar{
+    background:rgba(236, 114, 114, 0.651);
+    display: flex;
+    height: 40px;
+    text-align: center;
+}
+#app-title{
+    display: flex;
+    width: 80%;
+    justify-content: space-evenly;
+    align-items: center;
+    border-right: solid red;
+}
+#win-action{
+    display: flex;
+    
+}
+#app-menu-bar{
+    direction: flex;
+    height: 40px ;
+    background: rgb(235, 213, 213);
+    
+}
+#app-body{
+    display: flex;
+    background: rgb(240, 167, 167);
+    height: 500px;
+}
+.notepad-body{
+    height: 100%;
+    width: 100%;
+}
+.notepad-body textarea{
+    height: 100%;
+    width: 100%;
+    background: white;
+}
+.notepad-menu{
+    /* border: 2px solid white; */
+    width: 100%;
+    cursor: pointer;
+}
+.notepad-menu *{
+    margin: 5px;
+    vertical-align: bottom;
+    cursor: pointer;
+}
+.notepad-menu span:hover{
+    cursor: pointer;
+    background: white;
+    transform: scale(1.1);
+
+}
+.notepad-menu [pressed=true]{
+    background: lightblue;
+    color: teal;
+    border: solid red;
+
+}
+
