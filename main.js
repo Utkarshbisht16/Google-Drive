@@ -7,6 +7,7 @@ let divpreview = document.querySelector("#preview");
 let template = document.querySelector("#template");
 
 let divApp = document.querySelector("#app");
+let AppClose = document.querySelector("#close-app");
 let divAppTitleBar = document.querySelector("#app-title-bar");
 let divAppTitle = document.querySelector("#app-title");
 let divAppMenuBar = document.querySelector("#app-menu-bar");
@@ -136,6 +137,7 @@ function addTextFileHTML(rname, rid, pid) {
 }
 
 aRoothPath.addEventListener("click", viewFromBreadcrum);
+AppClose.addEventListener("click", appclose);
 
 function viewFromBreadcrum() {
     let apath = this;
@@ -511,6 +513,12 @@ function renameTextFile() {
     r.rname = Nrname;
     // change in storage
     saveToStorage();
+}
+function appclose(){
+    divAppTitle.innerHTML = "Title will come here...";
+    divAppTitle.setAttribute("rid","");
+    divAppMenuBar.innerHTML = "";
+    divAppBody.innerHTML = "";
 }
 function saveToStorage() {
     //use to create jso to a json string which can be saved
