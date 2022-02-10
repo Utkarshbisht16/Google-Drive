@@ -139,7 +139,7 @@
 .notepad-menu{
     /* border: 2px solid white; */
     width: 100%;
-    cursor: pointer;
+    /* cursor: pointer; */
 }
 .notepad-menu *{
     margin: 5px;
@@ -157,5 +157,9 @@
     color: teal;
     border: solid red;
 
+}
+#atag{
+    border: solid black;
+    display: none;
 }
 
