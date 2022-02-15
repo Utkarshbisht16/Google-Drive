@@ -130,7 +130,7 @@
 }
 #app-title{
     display: flex;
-    width: 85%;
+    width: 90%;
     justify-content: space-evenly;
     align-items: center;
     border-right: solid black;
@@ -211,3 +211,71 @@
  input[action=upload]{
     display: none;
  }
+ .album-menu{
+    /* border: 2px solid white; */
+    width: 100%;
+    /* cursor: pointer; */
+}
+.album-menu *{
+    margin: 5px;
+    vertical-align: bottom;
+    cursor: pointer;
+}
+.album-menu span:hover{
+    cursor: pointer;
+    background: white;
+    transform: scale(1.1);
+
+}
+.album-menu [pressed=true]{
+    background: lightblue;
+    color: teal;
+    border: solid red;
+
+}
+.album-body{
+    height: 100%;
+    width: 100%;
+}
+.picture-list{
+    height: 15%;
+    width: 98%;
+    margin: 5px;
+    padding: 3px;
+    background-color: lightseagreen;
+}
+.picture-list img{
+    border: solid blueviolet;
+    border-radius: 5px;
+    height: 90%;
+    padding: 2px;
+    cursor: pointer;
+}
+.picture-list img:hover{
+    transform: scale(1.1);
+    border: solid orangered 2px;
+}
+.picture-view{
+    border: solid red 2px;
+    width: 98%;
+    height: 400px;
+    margin: 5px;
+    display: flex;
+}
+.picture-view > div{
+    border: solid white 2px;
+    height: 100%;
+}
+.picture-view .move-left{
+    width: 15%;
+}
+.picture-view .picture-main{
+    width: 70%;
+    padding: 2px;
+}
+.picture-view .picture-main img{
+   height: 100%;
+}
+.picture-view .move-right{
+    width: 15%;
+}
