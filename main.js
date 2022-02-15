@@ -412,6 +412,33 @@ function viewAlbum() {
 
     divAppTitle.innerHTML = fname;
     divAppTitle.setAttribute("rid", fid);
+
+    let spanAdd = divAlbumMenu.querySelector("[action=add]");
+    spanAdd.addEventListener("click", addPictureToAlbum);
+}
+function addPictureToAlbum(){
+    let url = prompt("enter img url");
+    if(!url){
+        return;
+    }
+    let img = document.createElement("img");
+    img.setAttribute("src", url);
+    img.addEventListener("click", showPictureInMain);
+
+    let divPictureList = divAppBody.querySelector(".picture-list");
+    divPictureList.appendChild(img);
+}
+function showPictureInMain(){
+    let divPictureMainImg = divAppBody.querySelector(".picture-main > img");
+    divPictureMainImg.setAttribute("src", this.getAttribute("src"));
+
+    let divPictureList = divAppBody.querySelector(".picture-list");
+    let imgs = divPictureList.querySelectorAll("img");
+    for(let i = 0; i < imgs.length; i++){
+        imgs[i].setAttribute("pressed",false);
+    }
+
+    this.setAttribute("pressed", true);
 }
 function saveNotepad() {
     let fid = parseInt(divAppTitle.getAttribute("rid"));

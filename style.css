@@ -141,14 +141,14 @@
 }
 #app-menu-bar{
     direction: flex;
-    height: 40px ;
+    height: 40px;
     background: rgb(235, 213, 213);
     
 }
 #app-body{
     display: flex;
     background: rgb(240, 167, 167);
-    height: 500px;
+    height: 450px;
 }
 .notepad-body{
     height: 100%;
@@ -227,38 +227,39 @@
     transform: scale(1.1);
 
 }
-.album-menu [pressed=true]{
-    background: lightblue;
-    color: teal;
-    border: solid red;
-
-}
 .album-body{
     height: 100%;
     width: 100%;
 }
 .picture-list{
-    height: 15%;
+    height: 17%;
     width: 98%;
     margin: 5px;
-    padding: 3px;
-    background-color: lightseagreen;
+    background-color: lightgreen;
+    padding: 10px;
+    display: flex;
+    justify-content: space-evenly;
+    align-content: center;
 }
 .picture-list img{
-    border: solid blueviolet;
+    /* border: solid blueviolet; */
     border-radius: 5px;
-    height: 90%;
-    padding: 2px;
+    height: 88%;
+    /* padding: 5px; */
     cursor: pointer;
 }
 .picture-list img:hover{
-    transform: scale(1.1);
-    border: solid orangered 2px;
+    transform: scale(1.001);
+    border: solid black 1px;
+}
+.picture-list img[pressed=true]{
+    transform: scale(1.05);
+    /* border: solid gold; */
+    box-shadow: 3px 2px 5px red;
 }
 .picture-view{
-    border: solid red 2px;
-    width: 98%;
-    height: 400px;
+    background: lightcyan;
+    height: 74%;
     margin: 5px;
     display: flex;
 }
@@ -275,6 +276,7 @@
 }
 .picture-view .picture-main img{
    height: 100%;
+   width: 100%;
 }
 .picture-view .move-right{
     width: 15%;
