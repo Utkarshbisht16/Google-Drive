@@ -95,6 +95,29 @@
 .text-file [action]:hover{
     background: lightskyblue;
 }
+.album{
+    background: lightcoral;
+    color: white;
+    height: 100px ;
+    width: 150px;
+    border-radius: 20px;
+    margin: 10px;
+    padding: 10px;
+    border: solid sandybrown;
+}
+.album div[purpose = name]{
+    margin-top:  60px;
+    padding-left: 30px;
+}
+.album [action]{
+    /* border: solid wheat 0.2px; */
+    text-decoration: underline;
+    cursor: pointer;
+
+}
+.album [action]:hover{
+    background: lightskyblue;
+}
 #app{
     border: 1px solid black;
     margin: 10px;

@@ -15,6 +15,9 @@
         <button id="addTextFile">
             Add TextFile
         </button>
+        <button id="addAlbum">
+            Add Album
+        </button>
     </div>
     <div id="breadcrum">
         <a purpose="path" rid="-1">Root</a>
@@ -41,6 +44,12 @@
             <div purpose="name"></div>
         </div>
         <div class="text-file" pid="" rid="">
+            <span action="Rename">Rename</span>
+            <span action="Delete">Delete</span>
+            <span action="View">View</span>
+            <div purpose="name"></div>
+        </div>
+        <div class="album" pid="" rid="">
             <span action="Rename">Rename</span>
             <span action="Delete">Delete</span>
             <span action="View">View</span>
@@ -78,6 +87,12 @@
         </div>
         <div purpose="notepad-body" class="notepad-body">
             <textarea>i am notepad's body</textarea>
+        </div>
+        <div purpose="album-menu" class="album-menu">
+            i am album menu
+        </div>
+        <div purpose="album-body" class="album-body">
+            i am album body
         </div>
     </template>
 

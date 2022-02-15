@@ -1,5 +1,6 @@
 let btnfolder = document.querySelector("#addFolder");
 let btnfile = document.querySelector("#addTextFile");
+let btnalbum = document.querySelector("#addAlbum");
 let divContainer = document.querySelector("#container");
 let divBreadcrum = document.querySelector("#breadcrum");
 let aRoothPath = divBreadcrum.querySelector("a[purpose='path']");
@@ -51,7 +52,6 @@ btnfolder.addEventListener("click",
         //Storage save
         saveToStorage();
     });
-
 function addfolderHTML(rname, rid, pid) {
     // taking template and making a clone of it.
     let divFolderTemplate = template.content.querySelector(".folder");
@@ -136,6 +136,59 @@ function addTextFileHTML(rname, rid, pid) {
     divContainer.appendChild(divTextFile);
 }
 
+//album
+btnalbum.addEventListener("click",
+    function addalbum(e) {
+        let rname = prompt("Enter Album's name");
+        if (rname != null) {
+            rname = rname.trim();
+        }
+        if (!rname) { // empty name validation
+            alert("Empty name Album's can not be created");
+            return;
+        }
+        //unique validation
+        let alreadyExist = Resource.some(r => r.rname == rname && r.pid == cfid);
+        if (alreadyExist == true) {
+            alert(rname + " is already in use. Try some other name");
+            return;
+        }
+        let pid = cfid;
+        rid++;
+        //HTML save
+        addAlbumHTML(rname, rid, pid);
+        //RAM save
+        Resource.push({
+            rid: rid,
+            rname: rname,
+            rtype: "album",
+            pid: cfid,
+        });
+        //Storage save
+        saveToStorage();
+    });
+function addAlbumHTML(rname, rid, pid) {
+    // taking template and making a clone of it.
+    let divAlbumTemplate = template.content.querySelector(".album");
+    let divAlbum = document.importNode(divAlbumTemplate, true); // makes a copy
+
+    let spanrename = divAlbum.querySelector("[action=Rename]");
+    let spandelete = divAlbum.querySelector("[action=Delete]");
+    let spanview = divAlbum.querySelector("[action=View]");
+
+    //setting the name of folder
+    let divName = divAlbum.querySelector("[purpose=name]");
+    divName.innerHTML = rname;
+    divAlbum.setAttribute("pid", pid);
+    divAlbum.setAttribute("rid", rid);
+
+    spanrename.addEventListener("click", renameAlbum);
+    spandelete.addEventListener("click", deleteAlbum);
+    spanview.addEventListener("click", viewAlbum);
+
+    divContainer.appendChild(divAlbum);
+}
+
 aRoothPath.addEventListener("click", viewFromBreadcrum);
 AppClose.addEventListener("click", appclose);
 
@@ -157,6 +210,8 @@ function viewFromBreadcrum() {
                 addfolderHTML(Resource[i].rname, Resource[i].rid, Resource[i].pid);
             } else if (Resource[i].rtype == "text-file") {
                 addTextFileHTML(Resource[i].rname, Resource[i].rid, Resource[i].pid);
+            }else if (Resource[i].rtype == "album") {
+                addAlbumHTML(Resource[i].rname, Resource[i].rid, Resource[i].pid);
             }
         }
     }
@@ -216,6 +271,28 @@ function deleteTextFile() {
     //delete from storage
     saveToStorage();
 }
+function deleteAlbum() {
+    let spandelete = this;
+    let divAlbum = spandelete.parentNode;
+    let divName = divAlbum.querySelector("[purpose='name']");
+
+    let fname = divName.innerHTML;
+    let FidTBD = divAlbum.getAttribute("rid");
+
+    let sure = confirm(`Are you sure that you want to delete ${fname} ?`);
+    if (!sure) {
+        return;
+    }
+
+    //delete from HTML
+    divContainer.removeChild(divAlbum);
+
+    // delete from RAM
+    let ridx = Resource.findIndex(r => r.rid == FidTBD);
+    Resource.splice(ridx, 1);
+    //delete from storage
+    saveToStorage();
+}
 function viewFolder() {
     let spanview = this;
     let divFolder = spanview.parentNode;
@@ -240,6 +317,8 @@ function viewFolder() {
                 addfolderHTML(Resource[i].rname, Resource[i].rid, Resource[i].pid);
             } else if (Resource[i].rtype == "text-file") {
                 addTextFileHTML(Resource[i].rname, Resource[i].rid, Resource[i].pid);
+            }else if (Resource[i].rtype == "album") {
+                addAlbumHTML(Resource[i].rname, Resource[i].rid, Resource[i].pid);
             }
         }
     }
@@ -314,7 +393,26 @@ function viewTextFile() {
 
 
 }
+function viewAlbum() {
+    let spanview = this;
+    let divAlbum = spanview.parentNode;
+    let divName = divAlbum.querySelector("[purpose=name]");
+    let fname = divName.innerHTML;
+    let fid = parseInt(divAlbum.getAttribute("rid"));
 
+    let divAlbumMenuTemp = template.content.querySelector("[purpose=album-menu]");
+    let divAlbumMenu = document.importNode(divAlbumMenuTemp, true);
+    divAppMenuBar.innerHTML = "";
+    divAppMenuBar.appendChild(divAlbumMenu);
+
+    let divAlbumBodyTemp = template.content.querySelector("[purpose=album-body]");
+    let divAlbumBody = document.importNode(divAlbumBodyTemp, true);
+    divAppBody.innerHTML = "";
+    divAppBody.appendChild(divAlbumBody);
+
+    divAppTitle.innerHTML = fname;
+    divAppTitle.setAttribute("rid", fid);
+}
 function saveNotepad() {
     let fid = parseInt(divAppTitle.getAttribute("rid"));
     let resource = Resource.find(r => r.rid == fid);
@@ -519,6 +617,41 @@ function renameTextFile() {
     // change in storage
     saveToStorage();
 }
+function renameAlbum() {
+    let Nrname = prompt("Enter a new name of Album.");
+    if (Nrname != null) {
+        Nrname = Nrname.trim();
+    }
+    if (!Nrname) { // empty name validation
+        alert("Empty name album can not be created");
+        return;
+    }
+
+    let spanRename = this;
+    let divAlbum = spanRename.parentNode;
+    let divName = divAlbum.querySelector("[purpose=name]");
+    let Orname = divName.innerHTML;
+    let ridTBU = parseInt(divAlbum.getAttribute("rid"));
+
+    if (Orname == Nrname) {
+        alert("Please enter a new name");
+        return;
+    }
+
+    let alreadyExist = Resource.some(r => r.rname == Nrname && r.pid == cfid);
+    if (alreadyExist == true) {
+        alert(Nrname + " already exist. Please enter a new name");
+        return;
+    }
+
+    //Change HTML
+    divName.innerHTML = Nrname;
+    //change RAM
+    let r = Resource.find(r => r.rid == ridTBU);
+    r.rname = Nrname;
+    // change in storage
+    saveToStorage();
+}
 function appclose(){
     divAppTitle.innerHTML = "Title will come here...";
     divAppTitle.setAttribute("rid","");
@@ -542,6 +675,9 @@ function loadFromStorage() {
                 addfolderHTML(Resource[i].rname, Resource[i].rid, Resource[i].pid);
             } else if (Resource[i].rtype == "text-file") {
                 addTextFileHTML(Resource[i].rname, Resource[i].rid, Resource[i].pid);
+            }
+            else if (Resource[i].rtype == "album") {
+                addAlbumHTML(Resource[i].rname, Resource[i].rid, Resource[i].pid);
             }
         }
         if (Resource[i].rid > rid) { // setting rid to max rid.(so new rid's can be assign)
