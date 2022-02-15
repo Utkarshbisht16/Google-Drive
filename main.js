@@ -273,6 +273,7 @@ function viewTextFile() {
     let selectFontFamily = divAppMenuBar.querySelector("[action=font-family]");
     let selectFontSize = divAppMenuBar.querySelector("[action=font-size]");
     let spanDownload = divAppMenuBar.querySelector("[action=download]");
+    let spanforUpload = divAppMenuBar.querySelector("[action=forUpload]");
     let inputUpload = divAppMenuBar.querySelector("[action=upload]");
     let textarea = divAppBody.querySelector("textArea");
 
@@ -286,6 +287,10 @@ function viewTextFile() {
     selectFontFamily.addEventListener("change", ChangeNotepadFontFamily)
     selectFontSize.addEventListener("change", ChangeNotepadFontSize)
     spanDownload.addEventListener("click", downloadNotepad)
+    spanforUpload.addEventListener("click",
+    function(){
+        inputUpload.click();
+    })
     inputUpload.addEventListener("change", uploadNotepad)
 
     let resource = Resource.find(r => r.rid == fid);

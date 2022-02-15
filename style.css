@@ -185,3 +185,6 @@
     background: red;
     transform: scale(1.1);
  }
+ input[action=upload]{
+    display: none;
+ }
